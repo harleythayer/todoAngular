@@ -27,19 +27,21 @@ public class TodoController {
 	}
 
 	@RequestMapping(value = "{userName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Todo> getAllTodo() {
-		return todoRepository.findAll();
+	public List<Todo> getAllTodo(@PathVariable final String userName) {
+		return todoRepository.findAllByUserName(userName);
 	}
 
 	@RequestMapping(value = "{userName}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Todo createTodo(@RequestBody final Todo todo) {
+	public Todo createTodo(@PathVariable final String userName,
+						   @RequestBody final Todo todo) {
+		todo.setUserName( userName );
 		return todoRepository.save(todo);
 	}
 
 	@RequestMapping(value = "{userName}/{requestId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Todo getTodo(@PathVariable final String userName, 
 			            @PathVariable final String requestId ) throws NotFoundException {
-		final Todo todo = todoRepository.findOne(requestId);
+		final Todo todo = todoRepository.findByUserName( userName, requestId);
 		if (todo == null) {
 			throw new NotFoundException("Todo with id:" + requestId + " was not found");
 		}
@@ -50,7 +52,7 @@ public class TodoController {
 	public Todo updateTodo(@PathVariable final String userName, 
 						   @PathVariable final String requestId, 
 						   @RequestBody Todo todo) throws NotFoundException {
-		final Todo oldTodo = todoRepository.findOne(requestId);
+		final Todo oldTodo = todoRepository.findByUserName(userName, requestId);
 		if (oldTodo == null) {
 			throw new NotFoundException("Todo with id:" + requestId + " was not found");
 		}
@@ -60,8 +62,12 @@ public class TodoController {
 
 	@RequestMapping(value = "{userName}/{requestId}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable final String userName, 
-					   @PathVariable final String requestId) {
-		todoRepository.delete(requestId);
+					   @PathVariable final String requestId) throws NotFoundException {
+		Todo deleteTodo = todoRepository.findByUserName(userName, requestId);
+		if( deleteTodo == null ) {
+			throw new NotFoundException("Todo with userName: " + userName + " and Id: " + requestId + " was not found");
+		}
+		todoRepository.delete(deleteTodo.getId());
 	}
 
 }

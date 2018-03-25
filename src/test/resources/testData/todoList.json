@@ -2,7 +2,7 @@
 	"todo":[
 	{
     	"_id":"1",
-    	"userName":"Harley",
+    	"userName":"harley",
     	"whatToDo": "Test a todo item",
     	"completed":false
     },
@@ -10,6 +10,12 @@
     	"_id":"2",
     	"userName":"harley",
     	"whatToDo": "Test a second todo item",
+    	"completed":false
+    },
+    {
+    	"_id":"3",
+    	"userName":"cathy",
+    	"whatToDo": "Test a cathy todo item",
     	"completed":false
     }
     ]

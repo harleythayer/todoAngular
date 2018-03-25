@@ -57,17 +57,33 @@ public class TodoControllerTest {
 					   	.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(2)));
+		mvc.perform(get("/todos/cathy")
+			   	.accept(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(jsonPath("$", hasSize(1)));
 	}
 	
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
-	public void testGetOneTodo() throws Exception {
+	public void testGetOneHarleyTodo() throws Exception {
 		mvc.perform(get("/todos/harley/2")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("$.userName", is("harley")))
 					.andExpect(jsonPath("$.whatToDo", is("Test a second todo item")))
+					.andExpect(jsonPath("$.completed", is(false)));
+	}
+	
+	@Test
+	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
+	public void testGetOneCathyTodo() throws Exception {
+		mvc.perform(get("/todos/cathy/3")
+						.accept(MediaType.APPLICATION_JSON)
+					)
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("$.userName", is("cathy")))
+					.andExpect(jsonPath("$.whatToDo", is("Test a cathy todo item")))
 					.andExpect(jsonPath("$.completed", is(false)));
 	}
 	
@@ -99,6 +115,11 @@ public class TodoControllerTest {
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(1)));
+		
+		mvc.perform(get("/todos/cathy")
+				.accept(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(jsonPath("$", hasSize(1)));
 	}
 
 	@Test
