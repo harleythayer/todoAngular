@@ -2,13 +2,13 @@
 	"todo":[
 	{
     	"_id":"1",
-    	"name":"Todo test item",
+    	"userName":"Harley",
     	"whatToDo": "Test a todo item",
     	"completed":false
     },
     {
     	"_id":"2",
-    	"name":"Todo test item 2",
+    	"userName":"harley",
     	"whatToDo": "Test a second todo item",
     	"completed":false
     }

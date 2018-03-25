@@ -1,4 +1,4 @@
-package com.hthayer.todo.config;
+package com.hthayer.todoAngular.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

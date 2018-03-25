@@ -1,4 +1,4 @@
-package com.hthayer.todo.repository;
+package com.hthayer.todoAngular.repository;
 
 import static com.lordofthejars.nosqlunit.mongodb.MongoDbRule.MongoDbRuleBuilder.newMongoDbRule;
 import static org.assertj.core.api.Java6Assertions.assertThat;

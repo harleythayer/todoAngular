@@ -26,18 +26,19 @@ public class TodoController {
 		this.todoRepository = todoRepository;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "{userName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Todo> getAllTodo() {
 		return todoRepository.findAll();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "{userName}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Todo createTodo(@RequestBody final Todo todo) {
 		return todoRepository.save(todo);
 	}
 
-	@RequestMapping(value = "{requestId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Todo getTodo(@PathVariable final String requestId) throws NotFoundException {
+	@RequestMapping(value = "{userName}/{requestId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Todo getTodo(@PathVariable final String userName, 
+			            @PathVariable final String requestId ) throws NotFoundException {
 		final Todo todo = todoRepository.findOne(requestId);
 		if (todo == null) {
 			throw new NotFoundException("Todo with id:" + requestId + " was not found");
@@ -45,8 +46,10 @@ public class TodoController {
 		return todo;
 	}
 
-	@RequestMapping(value = "{requestId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Todo updateTodo(@PathVariable final String requestId, @RequestBody Todo todo) throws NotFoundException {
+	@RequestMapping(value = "{userName}/{requestId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Todo updateTodo(@PathVariable final String userName, 
+						   @PathVariable final String requestId, 
+						   @RequestBody Todo todo) throws NotFoundException {
 		final Todo oldTodo = todoRepository.findOne(requestId);
 		if (oldTodo == null) {
 			throw new NotFoundException("Todo with id:" + requestId + " was not found");
@@ -55,8 +58,9 @@ public class TodoController {
 		return todoRepository.save(oldTodo);
 	}
 
-	@RequestMapping(value = "{requestId}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable final String requestId) {
+	@RequestMapping(value = "{userName}/{requestId}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable final String userName, 
+					   @PathVariable final String requestId) {
 		todoRepository.delete(requestId);
 	}
 

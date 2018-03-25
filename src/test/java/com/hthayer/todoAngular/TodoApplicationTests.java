@@ -1,4 +1,4 @@
-package com.hthayer.todo;
+package com.hthayer.todoAngular;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

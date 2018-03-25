@@ -1,4 +1,4 @@
-package com.hthayer.todo.controllers;
+package com.hthayer.todoAngular.controllers;
 
 import static com.lordofthejars.nosqlunit.mongodb.MongoDbRule.MongoDbRuleBuilder.newMongoDbRule;
 import static org.hamcrest.CoreMatchers.is;
@@ -53,7 +53,7 @@ public class TodoControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testCountAllTodos() throws Exception {
-		mvc.perform(get("/")
+		mvc.perform(get("/todos/harley")
 					   	.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(2)));
@@ -62,11 +62,11 @@ public class TodoControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testGetOneTodo() throws Exception {
-		mvc.perform(get("/2")
+		mvc.perform(get("/todos/harley/2")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.name", is("Todo test item 2")))
+					.andExpect(jsonPath("$.userName", is("harley")))
 					.andExpect(jsonPath("$.whatToDo", is("Test a second todo item")))
 					.andExpect(jsonPath("$.completed", is(false)));
 	}
@@ -74,7 +74,7 @@ public class TodoControllerTest {
 	@Test
 	@UsingDataSet(loadStrategy = LoadStrategyEnum.DELETE_ALL)
 	public void testGetOneTodoFail() throws Exception {
-		mvc.perform(get("/3")
+		mvc.perform(get("/todos/harley/3")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isNotFound());
@@ -84,18 +84,18 @@ public class TodoControllerTest {
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testdeleteATodo() throws Exception {
 		final String id = "1";
-		mvc.perform(delete("/" + id)
+		mvc.perform(delete("/todos/harley/" + id)
 						.accept(MediaType.APPLICATION_JSON)
 					)
 				   	.andExpect(status().isOk());
 		
 		//Test controller to make sure it is throwing a 404 exception
-		mvc.perform(get("/" + id)
+		mvc.perform(get("/todos/harley/" + id)
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isNotFound());
 
-		mvc.perform(get("/")
+		mvc.perform(get("/todos/harley")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(1)));
@@ -104,30 +104,30 @@ public class TodoControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testUpdateOneTodo( ) throws Exception {
-		final Todo updateTodo = new Todo( "1", "updated todo", "We updated the todo item", true );
+		final Todo updateTodo = new Todo( "1", "harley", "We updated the todo item", true );
 		
 		
 		
-		mvc.perform(put("/1")
+		mvc.perform(put("/todos/harley/1")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content( mapper.writeValueAsString(updateTodo))
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.name", is(updateTodo.getName())))
+					.andExpect(jsonPath("$.userName", is(updateTodo.getUserName())))
 					.andExpect(jsonPath("$.whatToDo", is(updateTodo.getWhatToDo())))
 					.andExpect(jsonPath("$.completed", is(updateTodo.getCompleted())));
 		
 		final Todo updatedTodo = todoRepository.findOne(updateTodo.getId());
 		assertEquals( updateTodo.getWhatToDo(), updatedTodo.getWhatToDo()	);
-		assertEquals( updateTodo.getName(), updatedTodo.getName( ) );
+		assertEquals( updateTodo.getUserName(), updatedTodo.getUserName( ) );
 		assertEquals( updateTodo.getCompleted(), updatedTodo.getCompleted() );
 		
-		mvc.perform(get("/" + updateTodo.getId())
+		mvc.perform(get("/todos/harley/" + updateTodo.getId())
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.name", is(updateTodo.getName())))
+					.andExpect(jsonPath("$.userName", is(updateTodo.getUserName())))
 					.andExpect(jsonPath("$.whatToDo", is(updateTodo.getWhatToDo())))
 					.andExpect(jsonPath("$.completed", is(updateTodo.getCompleted())));
 
@@ -136,9 +136,9 @@ public class TodoControllerTest {
 	@Test
 	@UsingDataSet(loadStrategy = LoadStrategyEnum.DELETE_ALL)
 	public void testUpdateOneTodoFail( ) throws Exception {
-		final Todo updateTodo = new Todo( "6", "updated todo", "We updated the todo item", true );
+		final Todo updateTodo = new Todo( "6", "harley", "We updated the todo item", true );
 				
-		mvc.perform(put("/" + updateTodo.getId())
+		mvc.perform(put("/todos/harley/" + updateTodo.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content( mapper.writeValueAsString(updateTodo))
 						.accept(MediaType.APPLICATION_JSON)
@@ -149,23 +149,23 @@ public class TodoControllerTest {
 	@Test
 	@UsingDataSet(loadStrategy = LoadStrategyEnum.DELETE_ALL)
 	public void testCreateNewTodo( ) throws Exception {
-		final Todo newTodo = new Todo( "5", "New Todo", "This is a new Todo we just created", true);
+		final Todo newTodo = new Todo( "5", "harley", "This is a new Todo we just created", true);
 				
-		mvc.perform(post("/")
+		mvc.perform(post("/todos/harley/")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content( mapper.writeValueAsString(newTodo))
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.name", is(newTodo.getName())))
+					.andExpect(jsonPath("$.userName", is(newTodo.getUserName())))
 					.andExpect(jsonPath("$.whatToDo", is(newTodo.getWhatToDo())))
 					.andExpect(jsonPath("$.completed", is(newTodo.getCompleted())));
 		
-		mvc.perform(get("/" + newTodo.getId())
+		mvc.perform(get("/todos/harley/" + newTodo.getId())
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.name", is(newTodo.getName())))
+					.andExpect(jsonPath("$.userName", is(newTodo.getUserName())))
 					.andExpect(jsonPath("$.whatToDo", is(newTodo.getWhatToDo())))
 					.andExpect(jsonPath("$.completed", is(newTodo.getCompleted())));
 

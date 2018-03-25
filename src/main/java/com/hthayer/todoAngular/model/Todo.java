@@ -7,21 +7,21 @@ public class Todo {
     @Id
     private String id;
 
-    private String name;
+    private String userName;
     private String whatToDo;
     private boolean completed;
     
     public Todo( ) { }
     
-    public Todo( String id, String name, String whatToDo, boolean completed ) {
+    public Todo( String id, String userName, String whatToDo, boolean completed ) {
     	this.id = id;
-    	this.name = name;
+    	this.userName = userName;
     	this.whatToDo = whatToDo;
     	this.completed = completed;
     }
     
-    public Todo( String name, String whatToDo, boolean completed ) {
-    	this.name = name;
+    public Todo( String userName, String whatToDo, boolean completed ) {
+    	this.userName = userName;
     	this.whatToDo = whatToDo;
     	this.completed = completed;
     }
@@ -37,15 +37,15 @@ public class Todo {
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public String getUserName() {
+		return userName;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setUserName(String name) {
+		this.userName = name;
 	}
 
 	/**
