@@ -3,22 +3,15 @@
   var app = angular.module( "mainModule", [] );
 
   var MainController = function($scope, $http) {
-  
-  	var onTodoComplete = function( response ) {
-  		$scope.todos = response.data;
-  		$scope.incompleteCount( );
-  	};
   	
   	var onError = function( failType ) {
   		console.log( failType + " failed!");
   	}
   	
   	$scope.user = "";
-  	$scope.todoUser = "";
   	
   	$scope.enterUser = function( userName ) {
   		$scope.user = userName;
-  		$scope.todoUser = userName.toLowerCase( );
   		$scope.getTodos( userName.toLowerCase() );
   	}
   	
@@ -36,15 +29,24 @@
   	
   	$scope.getTodos = function( userName ) {
   		$http.get("/todos/" + userName )
-  			.then( onTodoComplete, onError );
+  			.then( function( response ){
+  						$scope.todos = response.data;
+  						$scope.incompleteCount( );
+  				   }, 
+  				   function( response ) {
+					   console.log("Failed to create new Todo reason: " + response.data.error );
+				   }
+  				 );
   	}
   	
   	$scope.updateTodo = function( todo ) {
   		var url = "/todos/" + $scope.user +"/" + todo.id;
   		$http.put(url, todo, [] )
-  			.then( function successCallback( ) {
+  			.then( function( response ) {
   				   },
-  				   onError
+  				   function( response ) {
+  					   console.log("Failed to update Todo with id: " + todo.id + " reason: " + response.data.error );
+  				   }
   				);
   	}
   	
@@ -56,23 +58,27 @@
   				whatToDo: wToDo 
   		};
   		$http.post( url, newTodo, [] )
-  			.then( function successCallback( response ) {
+  			.then( function( response ) {
   						$scope.todos.push( response.data );
   				   },
-  				   onError
+  				   function( response ) {
+  					   console.log("Failed to create new Todo reason: " + response.data.error );
+  				   }
   			 	); 
-  	}
-  	
-  	var deleteSuccess = function( id ) {
-  		$scope.todos = $scope.todos.filter( function( td ) {
-			return td.id !== id;
-		});
   	}
   	
   	$scope.deleteTodo = function( id ) {
   		var url = "/todos/" + $scope.user + "/" + id;
   		$http.delete(url, null, [] )
-			.then( deleteSuccess(id), onError );
+			.then( function( ) {
+						$scope.todos = $scope.todos.filter( function( td ) {
+							return td.id !== id;
+						});
+					}, 
+					function(response) {
+						console.log("could not delete Id: " + id + " reason: " + response.data.error);
+					} 
+			);
   	}
   };
   
