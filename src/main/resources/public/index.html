@@ -1,40 +1,85 @@
 <!DOCTYPE html>
 <html ng-app="mainModule">
 
-  <head>
-    <script data-require="angular.js@1.6.0" data-semver="1.6.0" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
-    <!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<head>
+<script data-require="angular.js@1.6.0" data-semver="1.6.0"
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous">
 
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="js/controllers/mainController.js"></script>
-  </head>
-  
-  <title ng-controller="MainController">{{user}}'s todos </title>
+<!-- Latest compiled and minified JavaScript -->
+<!-- <script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script> -->
+<script src="js/controllers/mainController.js"></script>
+</head>
 
-  <body ng-controller="MainController">
-  	<div class="panel">
-  		<div class="input_group">
-  			<input class="form-control" style="width:400px;" ng-model="userName"  />
-  			<span class="input-group-btn">
-  				<button class="btn btn-default" ng-click="enterUser(userName)">Enter</button>
-  			</span>
-  		</div>
-  	</div>
-    
-    <div class="page-header" ng-hide=user=="">
-    	<h1>
-    		{{user}}'s To Do List
-    		<span class="label label-default" ng-class="warningLevel()"
-					ng-hide="incompleteCount() == 0">
-				{{incompleteCount( )}}
-    		</span>
-    	</h1>
-    </div>
-  </body>
+<title ng-controller="MainController">{{user}}'s todos</title>
+
+<body ng-controller="MainController">
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="input_group">
+					<p>Enter the UserName</p>
+					<input class="form-control" style="width: 400px;"
+						ng-model="userName" /> <span class="input-group-btn">
+						<button class="btn btn-default" ng-click="enterUser(userName)">Enter</button>
+					</span>
+				</div>
+			</div>
+			<div class="col-sm-8"></div>
+		</div>
+		<div class="row" ng-hide=user=="">
+			<div class="col-sm-4">
+				<div class="page-header">
+					<h1>
+						{{user}}'s To Do List <span class="label label-default"
+							ng-class="warningLevel()" ng-hide="incompleteCount() == 0">
+							{{incompleteCount( )}} </span>
+					</h1>
+				</div>
+			</div>
+			<div class="col-sm-8"></div>
+		</div>
+		<div class="row" ng-hide=user=="">
+			<div class="col-sm-4">
+				<div class="input-group">
+					<input class="form-control" ng-model="whatToDo" /> <span
+						class="input-group-btn">
+						<button class="btn btn-default" ng-click="addNewTodo(whatToDo)">Add</button>
+					</span>
+				</div>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Description</th>
+							<th>Completed</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="todo in todos">
+							<td>{{todo.whatToDo}}</td>
+							<td><input type="checkbox" ng-model="todo.completed"
+								ng-click="updateTodo(todo)" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-8"></div>
+		</div>
+	</div>
+</body>
 
 </html>

@@ -10,9 +10,11 @@
   	};
   	
   	$scope.user = "";
+  	$scope.todoUser = "";
   	
   	$scope.enterUser = function( userName ) {
   		$scope.user = userName;
+  		$scope.todoUser = userName.toLowerCase( );
   		$scope.getTodos( userName.toLowerCase() );
   	}
   	
@@ -31,6 +33,29 @@
   	$scope.getTodos = function( userName ) {
   		$http.get("/todos/" + userName )
   			.then( onTodoComplete );
+  	}
+  	
+  	$scope.updateTodo = function( todo ) {
+  		$http.put("/todos/" + $scope.user +"/" +todo.id, todo, [] )
+  			.then( function successCallback( ) {
+  				console.log( "put success" );
+  			},
+  			function errorCallback( ) {
+  				console.log( "put Error" );
+  			}  );
+  	}
+  	
+  	$scope.addNewTodo = function( wToDo ) {
+  		var url = "/todos/" + $scope.user;
+  		var newTodo = { userName: $scope.user, completed: false, whatToDo: wToDo };
+  		$http.post( url, newTodo, [] )
+  			.then( function successCallback( response ) {
+  				$scope.todos.push( response.data );
+  				console.log( "post success" );
+  			},
+  			function errorCallback( ) {
+  				console.log( "post Error" );
+  			}  ); 
   	}
   };
   
