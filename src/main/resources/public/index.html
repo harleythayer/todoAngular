@@ -39,7 +39,6 @@
 					</span>
 				</div>
 			</div>
-			<div class="col-sm-8"></div>
 		</div>
 		<div class="row" ng-hide=user=="">
 			<div class="col-sm-4">
@@ -51,7 +50,6 @@
 					</h1>
 				</div>
 			</div>
-			<div class="col-sm-8"></div>
 		</div>
 		<div class="row" ng-hide=user=="">
 			<div class="col-sm-4">
@@ -73,11 +71,11 @@
 							<td>{{todo.whatToDo}}</td>
 							<td><input type="checkbox" ng-model="todo.completed"
 								ng-click="updateTodo(todo)" /></td>
+							<td><button class="btn btn-danger" ng-click="deleteTodo(todo.id)">Delete</button></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div class="col-sm-8"></div>
 		</div>
 	</div>
 </body>

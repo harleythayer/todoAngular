@@ -9,6 +9,10 @@
   		$scope.incompleteCount( );
   	};
   	
+  	var onError = function( failType ) {
+  		console.log( failType + " failed!");
+  	}
+  	
   	$scope.user = "";
   	$scope.todoUser = "";
   	
@@ -32,30 +36,43 @@
   	
   	$scope.getTodos = function( userName ) {
   		$http.get("/todos/" + userName )
-  			.then( onTodoComplete );
+  			.then( onTodoComplete, onError );
   	}
   	
   	$scope.updateTodo = function( todo ) {
-  		$http.put("/todos/" + $scope.user +"/" +todo.id, todo, [] )
+  		var url = "/todos/" + $scope.user +"/" + todo.id;
+  		$http.put(url, todo, [] )
   			.then( function successCallback( ) {
-  				console.log( "put success" );
-  			},
-  			function errorCallback( ) {
-  				console.log( "put Error" );
-  			}  );
+  				   },
+  				   onError
+  				);
   	}
   	
   	$scope.addNewTodo = function( wToDo ) {
   		var url = "/todos/" + $scope.user;
-  		var newTodo = { userName: $scope.user, completed: false, whatToDo: wToDo };
+  		var newTodo = { 
+  				userName: $scope.user, 
+  				completed: false, 
+  				whatToDo: wToDo 
+  		};
   		$http.post( url, newTodo, [] )
   			.then( function successCallback( response ) {
-  				$scope.todos.push( response.data );
-  				console.log( "post success" );
-  			},
-  			function errorCallback( ) {
-  				console.log( "post Error" );
-  			}  ); 
+  						$scope.todos.push( response.data );
+  				   },
+  				   onError
+  			 	); 
+  	}
+  	
+  	var deleteSuccess = function( id ) {
+  		$scope.todos = $scope.todos.filter( function( td ) {
+			return td.id !== id;
+		});
+  	}
+  	
+  	$scope.deleteTodo = function( id ) {
+  		var url = "/todos/" + $scope.user + "/" + id;
+  		$http.delete(url, null, [] )
+			.then( deleteSuccess(id), onError );
   	}
   };
   
