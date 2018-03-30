@@ -16,7 +16,7 @@ import com.hthayer.todoAngular.model.Todo;
 import com.hthayer.todoAngular.repository.TodoRepository;
 
 @RestController
-@RequestMapping(value = "/todos")
+@RequestMapping(value = "v1/todos")
 public class TodoController {
 
 	private final TodoRepository todoRepository;

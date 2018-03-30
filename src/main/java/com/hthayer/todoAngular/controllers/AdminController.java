@@ -19,7 +19,7 @@ import com.hthayer.todoAngular.model.Todo;
 import com.hthayer.todoAngular.repository.TodoRepository;
 
 @RestController
-@RequestMapping(value = "/admin")
+@RequestMapping(value = "v1/admin")
 public class AdminController {
 
 	private final TodoRepository todoRepository;

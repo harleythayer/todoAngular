@@ -53,7 +53,7 @@ public class AdminControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testCountAllTodos() throws Exception {
-		mvc.perform(get("/admin")
+		mvc.perform(get("/v1/admin")
 					   	.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(3)));
@@ -62,7 +62,7 @@ public class AdminControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testCountAllHarleyTodos() throws Exception {
-		mvc.perform(get("/admin?username=harley")
+		mvc.perform(get("/v1/admin?username=harley")
 					   	.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(2)));
@@ -71,7 +71,7 @@ public class AdminControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testGetOneHarleyTodo() throws Exception {
-		mvc.perform(get("/admin/user?username=harley&id=2")
+		mvc.perform(get("/v1/admin/user?username=harley&id=2")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
@@ -83,7 +83,7 @@ public class AdminControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testGetOneCathyTodo() throws Exception {
-		mvc.perform(get("/admin/user?username=cathy&id=3")
+		mvc.perform(get("/v1/admin/user?username=cathy&id=3")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
@@ -95,7 +95,7 @@ public class AdminControllerTest {
 	@Test
 	@UsingDataSet(loadStrategy = LoadStrategyEnum.DELETE_ALL)
 	public void testGetOneTodoFail() throws Exception {
-		mvc.perform(get("/admin/user?username=harley&id=3")
+		mvc.perform(get("/v1/admin/user?username=harley&id=3")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isNotFound());
@@ -105,18 +105,18 @@ public class AdminControllerTest {
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testdeleteATodo() throws Exception {
 		final String id = "1";
-		mvc.perform(delete("/admin/user?username=harley&id=" + id)
+		mvc.perform(delete("/v1/admin/user?username=harley&id=" + id)
 						.accept(MediaType.APPLICATION_JSON)
 					)
 				   	.andExpect(status().isOk());
 		
 		//Test controller to make sure it is throwing a 404 exception
-		mvc.perform(get("/admin/user?username=harley&id=" + id)
+		mvc.perform(get("/v1/admin/user?username=harley&id=" + id)
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isNotFound());
 
-		mvc.perform(get("/admin?username=harley")
+		mvc.perform(get("/v1/admin?username=harley")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(1)));
@@ -128,7 +128,7 @@ public class AdminControllerTest {
 		final String id = "1";
 		final Todo updateTodo = new Todo( id, "harley", "We updated the todo item", true );
 		
-		mvc.perform(put("/admin/user?username=harley&id=" + id)
+		mvc.perform(put("/v1/admin/user?username=harley&id=" + id)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content( mapper.writeValueAsString(updateTodo))
 						.accept(MediaType.APPLICATION_JSON)
@@ -143,7 +143,7 @@ public class AdminControllerTest {
 		assertEquals( updateTodo.getUserName(), updatedTodo.getUserName( ) );
 		assertEquals( updateTodo.getCompleted(), updatedTodo.getCompleted() );
 		
-		mvc.perform(get("/admin/user?username=harley&id=" + updateTodo.getId())
+		mvc.perform(get("/v1/admin/user?username=harley&id=" + updateTodo.getId())
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
@@ -158,7 +158,7 @@ public class AdminControllerTest {
 	public void testUpdateOneTodoFail( ) throws Exception {
 		final Todo updateTodo = new Todo( "6", "harley", "We updated the todo item", true );
 				
-		mvc.perform(put("/admin/user?username=harley&id=" + updateTodo.getId())
+		mvc.perform(put("/v1/admin/user?username=harley&id=" + updateTodo.getId())
 						.contentType(MediaType.APPLICATION_JSON)
 						.content( mapper.writeValueAsString(updateTodo))
 						.accept(MediaType.APPLICATION_JSON)
@@ -172,7 +172,7 @@ public class AdminControllerTest {
 	public void testCreateNewTodo( ) throws Exception {
 		final Todo newTodo = new Todo( "5", "harley", "This is a new Todo we just created", true);
 				
-		mvc.perform(post("/admin/user?username=harley")
+		mvc.perform(post("/v1/admin/user?username=harley")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content( mapper.writeValueAsString(newTodo))
 						.accept(MediaType.APPLICATION_JSON)
@@ -182,7 +182,7 @@ public class AdminControllerTest {
 					.andExpect(jsonPath("$.whatToDo", is(newTodo.getWhatToDo())))
 					.andExpect(jsonPath("$.completed", is(newTodo.getCompleted())));
 		
-		mvc.perform(get("/admin/user?username=harley&id=" + newTodo.getId())
+		mvc.perform(get("/v1/admin/user?username=harley&id=" + newTodo.getId())
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk())
