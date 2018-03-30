@@ -3,7 +3,7 @@ angular.module("todoApp")
 	.constant("userListPageCount", 3)
 	.controller("AdminController", function($scope, $http, userListActiveClass, userListPageCount){
 	
-		$http.get("/admin/" )
+		$http.get("/v1/admin/" )
 			.then( function( response ){
 						$scope.todos = response.data;
 				   }, 
@@ -48,7 +48,7 @@ angular.module("todoApp")
 		};
 		
 		$scope.deleteTodo = function( userName, id ) {
-			$http.delete("/admin/user?username=" + userName + "&id=" + id )
+			$http.delete("/v1/admin/user?username=" + userName + "&id=" + id )
 				.then( function( response ){
 							$scope.todos = $scope.todos.filter( function( td ) {
 								return td.id !== id;
