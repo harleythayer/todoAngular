@@ -30,15 +30,14 @@ public class AdminController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Todo> getAllTodo() {
-		return todoRepository.findAll();
+	public List<Todo> getAllTodo( @RequestParam(value = "username", required = false) String userName ) {
+		if( userName == null ) {
+			return todoRepository.findAll();
+		}else{
+			return todoRepository.findAllByUserName(userName.toLowerCase());
+		}
 	}
 	
-	@RequestMapping(value="userAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Todo> getAllUserTodos( @RequestParam(value = "username", required = true) String userName ) {
-		return todoRepository.findAllByUserName(userName.toLowerCase());
-	}
-
 	@RequestMapping(value = "user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Todo createTodo( @RequestParam(value = "username", required = true) String userName,
 						    @RequestBody final Todo todo) {

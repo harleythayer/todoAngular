@@ -53,7 +53,7 @@ public class AdminControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testCountAllTodos() throws Exception {
-		mvc.perform(get("/admin/")
+		mvc.perform(get("/admin")
 					   	.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(3)));
@@ -62,7 +62,7 @@ public class AdminControllerTest {
 	@Test
 	@UsingDataSet(locations = "/testData/todoList.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
 	public void testCountAllHarleyTodos() throws Exception {
-		mvc.perform(get("/admin/userAll?username=harley")
+		mvc.perform(get("/admin?username=harley")
 					   	.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(2)));
@@ -116,7 +116,7 @@ public class AdminControllerTest {
 					)
 					.andExpect(status().isNotFound());
 
-		mvc.perform(get("/admin/userAll?username=harley")
+		mvc.perform(get("/admin?username=harley")
 						.accept(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(jsonPath("$", hasSize(1)));
