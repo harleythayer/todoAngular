@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html ng-app="mainModule">
+<html ng-app="todoApp">
 
 <head>
 <script src="packages/angular/angular.js"></script>
 <link href="packages/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script src="filters/customFilters.js"></script>
 <link href="packages/bootstrap/css/bootstrap-theme.css" rel="stylesheet" />
+
+<script src="modules/todoApp.js"></script>
 <script src="controllers/mainController.js"></script>
+<script src="controllers/userController.js"></script>
 </head>
 
-<title ng-controller="MainController">Todo App</title>
+<title>Todo App</title>
 
 <body ng-controller="MainController">
 
-	<div class="container-fluid">
+	<div class="container-fluid" ng-controller="UserController">
 		<div class="row">
 			<div class="col-sm-4">
 				<div class="input_group">
